@@ -1,16 +1,17 @@
 # subscribers to daily email
+# info redacted, but template the same
 
 email_list = [
     {
         "addresses": ["*******", "*******"],
-        "lat": 42.60167158864921,
-        "lon": -70.65405905131801,
-        "place": "Gloucester, MA"
+        "lat": 00.000000,
+        "lon": 00.000000,
+        "place": "Anytown, PA"
         },
     {
         "addresses": ["*******"],
-        "lat": 42.343545584517514,
-        "lon": -71.12657734418028,
-        "place": "Brookline, MA"
+        "lat": 00.000000,
+        "lon": 00.000000,
+        "place": "Everytown, OH"
         }
     ]

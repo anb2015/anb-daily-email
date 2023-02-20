@@ -10,13 +10,13 @@ from weather import weather_list
 from trivia import trivia_questions, trivia_answers
 from joke import joke_text
 
-my_email = "********"
+my_email = "anb.daily@gmail.com"
 my_password = os.environ.get("GMAIL_PASSWORD")
 divider = "\n\n*      *      *      *      *      *      *      *      *      *      *      *      *\n\n"
 space = "\n\n\n\n\n\n"
 
 for i in range(len(email_list)):
-    # build each email recipients customized text
+    # build each email recipient's customized text
     address = email_list[i]["addresses"]
 
     email_text = "To: " + ", ".join(address) + "\n"
@@ -51,21 +51,11 @@ for i in range(len(email_list)):
     email_simple += "Joke of the Day provided by https://v2.jokeapi.dev/.\n"
     email_simple += "Automated email service provided by https://www.pythonanywhere.com/."
 
-    try:
-        with smtplib.SMTP("smtp.gmail.com", port=587) as connection:
-            connection.starttls()
-            connection.login(my_email, my_password)
-            connection.sendmail(
-                from_addr=my_email,
-                to_addrs=address,
-                msg=email_text
-                )
-    except UnicodeEncodeError:
-        with smtplib.SMTP("smtp.gmail.com", port=587) as connection:
-            connection.starttls()
-            connection.login(my_email, my_password)
-            connection.sendmail(
-                from_addr=my_email,
-                to_addrs=address,
-                msg=email_text
-                )
+    with smtplib.SMTP("smtp.gmail.com", port=587) as connection:
+        connection.starttls()
+        connection.login(my_email, my_password)
+        connection.sendmail(
+            from_addr=my_email,
+            to_addrs=address,
+            msg=email_text
+            )

@@ -3,10 +3,12 @@
 from emails import email_list
 import requests
 import os
+from datetime import datetime
 
 weather_list = []
 
 for i in range(len(email_list)):
+    place = email_list[i]["place"]
     lat = email_list[i]["lat"]
     lon = email_list[i]["lon"]
     owm_acct = os.environ.get("OWM_ACCT_NUM")
@@ -31,15 +33,35 @@ for i in range(len(email_list)):
     description = current["weather"][0]["description"]
 
     hourly = data.get("hourly")
+
+    # today's high and low:
+    next_24_data = [hourly[i] for i in range(24)]
+    next_24_temp_list = []
+    for i in next_24_data:
+        next_24_temp_list.append(round(i["temp"]))
+    today_high = max(next_24_temp_list)
+    today_low = min(next_24_temp_list)
+
+    # next 12 hours:
     next_12_data = [hourly[i] for i in range(12)]
-    next_12_temp = [
-        f'{str(round(i.get("temp")))} F -- {i.get("weather")[0]["main"].capitalize()} ('
-        f'{i.get("weather")[0]["description"]}) -- {round(i.get("wind_speed"))} mph winds'
-        for i in next_12_data]
+    next_12_time_object = [datetime.fromtimestamp(i["dt"]) for i in next_12_data]
+    next_12_time_hour = [i.strftime("%H") for i in next_12_time_object]
+    next_12_temp = []
+    for i in range(12):
+        next_12_temp_element = ""
+        next_12_temp_element += f"{next_12_time_hour[i]}:00 -- "
+        next_12_temp_element += f"{round(next_12_data[i].get('temp'))} F -- "
+        next_12_temp_element += f"{next_12_data[i].get('weather')[0]['main'].capitalize()} "
+        next_12_temp_element += f"({next_12_data[i].get('weather')[0]['description']}) -- "
+        next_12_temp_element += f"{round(next_12_data[i].get('wind_speed'))} mph winds"
+        next_12_temp.append(next_12_temp_element)
     next_12_formatted = "\n".join(next_12_temp)
 
+    # next 7 days:
     daily = data.get("daily")
     next_7_data = [daily[i] for i in range(7)]
+    next_7_day_object = [datetime.fromtimestamp(i["dt"]) for i in next_7_data]
+    next_7_day_name = [i.strftime("%A") for i in next_7_day_object]
     next_7_list = [i.get("temp") for i in next_7_data]
     next_7_highs = [round(i.get("max")) for i in next_7_list]
     next_7_lows = [round(i.get("min")) for i in next_7_list]
@@ -49,6 +71,7 @@ for i in range(len(email_list)):
     next_7_wind = [round(i.get("wind_speed")) for i in next_7_data]
     next_7_string = ""
     for i in range(7):
+        next_7_string += f"{next_7_day_name[i]}: "
         next_7_string += f"high {next_7_highs[i]}, "
         next_7_string += f"low {next_7_lows[i]} -- "
         next_7_string += f"{next_7_main[i].capitalize()} ({next_7_descr[i]}) -- "
@@ -56,8 +79,10 @@ for i in range(len(email_list)):
     next_7_string = f"Forecast the next 7 days:\n{next_7_string}"
     next_7_string = next_7_string[:-1]
 
-    weather = f"The current temperature for your location is {round(current_temp)} F.\n" \
+    weather = f"The current temperature for {place} is {round(current_temp)} F.\n" \
               f"It feels like {round(feels_like)} F.\n" \
+              f"Today's high temperature: {today_high} F.\n" \
+              f"Tonight's low temperature: {today_low} F.\n" \
               f"The humidity is {humidity}%.\n" \
               f"The wind speed is {round(wind_speed)} mph.\n" \
               f"{main.capitalize()} ({description}) expected.\n\n" \

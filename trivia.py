@@ -34,6 +34,7 @@ for i in question_data:
     trivia_questions += "\n\n"
     count += 1
 trivia_questions = trivia_questions[:-2]
+trivia_questions = trivia_questions.encode('utf-8').decode('ascii', 'ignore')
 
 
 trivia_answers = ":srewsnA aivirT"
@@ -41,3 +42,4 @@ count_a = 1
 for i in question_data:
     trivia_answers += f"\n{html.unescape(i['correct_answer'][::-1])} .{count_a}"
     count_a += 1
+trivia_answers = trivia_answers.encode('utf-8').decode('ascii', 'ignore')

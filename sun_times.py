@@ -35,8 +35,8 @@ for j in range(len(lat_lng)):
     sunset_local = sunset_hour + sunset_rest
     day_length = f"{day_length_hr} hours {day_length_min} minutes"
 
-    sunrise_string = f"Today's sunrise: {sunrise_local}"
-    sunset_string = f"Today's sunset: {sunset_local}"
+    sunrise_string = f"This morning's sunrise: {sunrise_local}"
+    sunset_string = f"This evening's sunset: {sunset_local}"
     day_length_string = f"Today's light will last {day_length}."
 
     sun_times_string = f"{sunrise_string}\n{sunset_string}\n{day_length_string}"

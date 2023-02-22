@@ -9,6 +9,7 @@ from sun_times import sun_times_list
 from weather import weather_list
 from trivia import trivia_questions, trivia_answers
 from joke import joke_text
+from words import described_staff
 
 my_email = "anb.daily@gmail.com"
 my_password = os.environ.get("GMAIL_PASSWORD")
@@ -21,6 +22,7 @@ for i in range(len(email_list)):
 
     email_text = "To: " + ", ".join(address) + "\n"
     email_text += f"Subject:Sunrise/Sunset Times for {email_list[i]['place']} (UTC-5)\n\n"
+    email_text += f"Greetings from the {described_staff}.\n\n"
     email_text += f"{sun_times_list[i]}\n\n"
     email_text += f"{weather_list[i]}"
     email_text += divider

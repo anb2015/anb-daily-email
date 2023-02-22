@@ -7,10 +7,10 @@ from datetime import datetime
 
 weather_list = []
 
-for i in range(len(email_list)):
-    place = email_list[i]["place"]
-    lat = email_list[i]["lat"]
-    lon = email_list[i]["lon"]
+for num in range(len(email_list)):
+    place = email_list[num]["place"]
+    lat = email_list[num]["lat"]
+    lon = email_list[num]["lon"]
     owm_acct = os.environ.get("OWM_ACCT_NUM")
 
     parameters = {
@@ -59,30 +59,31 @@ for i in range(len(email_list)):
 
     # next 7 days:
     daily = data.get("daily")
-    next_7_data = [daily[i] for i in range(7)]
-    next_7_day_object = [datetime.fromtimestamp(i["dt"]) for i in next_7_data]
-    next_7_day_name = [i.strftime("%A") for i in next_7_day_object]
+    next_7_data = [daily[i] for i in range(8)]
+    next_7_day_object = [datetime.fromtimestamp(i["dt"]) for i in next_7_data][1:]
+    next_7_day_name = ["Today"]
+    next_7_day_name.extend([i.strftime("%A") for i in next_7_day_object])
     next_7_list = [i.get("temp") for i in next_7_data]
-    next_7_highs = [round(i.get("max")) for i in next_7_list]
-    next_7_lows = [round(i.get("min")) for i in next_7_list]
-    next_7_weather = [i.get("weather") for i in next_7_data]
+    next_7_highs = [round(i.get("max")) for i in next_7_list][:-1]
+    next_7_lows = [round(i.get("min")) for i in next_7_list][1:]
+    next_7_weather = [i.get("weather") for i in next_7_data][:-1]
     next_7_main = [next_7_weather[i][0].get("main") for i in range(7)]
     next_7_descr = [next_7_weather[i][0].get("description") for i in range(7)]
-    next_7_wind = [round(i.get("wind_speed")) for i in next_7_data]
+    next_7_wind = [round(i.get("wind_speed")) for i in next_7_data][:-1]
     next_7_string = ""
     for i in range(7):
         next_7_string += f"{next_7_day_name[i]}: "
-        next_7_string += f"high {next_7_highs[i]}, "
-        next_7_string += f"low {next_7_lows[i]} -- "
-        next_7_string += f"{next_7_main[i].capitalize()} ({next_7_descr[i]}) -- "
-        next_7_string += f"{next_7_wind[i]} mph winds\n"
+        next_7_string += f"Daytime high {next_7_highs[i]} F "
+        next_7_string += f"with {next_7_main[i].capitalize()} ({next_7_descr[i]}) "
+        next_7_string += f"and {next_7_wind[i]} mph winds "
+        next_7_string += f"followed by overnight low {next_7_lows[i]} F.\n"
     next_7_string = f"Forecast the next 7 days:\n{next_7_string}"
     next_7_string = next_7_string[:-1]
 
     weather = f"The current temperature for {place} is {round(current_temp)} F.\n" \
               f"It feels like {round(feels_like)} F.\n" \
               f"Today's high temperature: {today_high} F.\n" \
-              f"Tonight's low temperature: {today_low} F.\n" \
+              f"Tonight's low temperature: {next_7_lows[0]} F.\n" \
               f"The humidity is {humidity}%.\n" \
               f"The wind speed is {round(wind_speed)} mph.\n" \
               f"{main.capitalize()} ({description}) expected.\n\n" \

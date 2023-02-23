@@ -39,20 +39,6 @@ for i in range(len(email_list)):
     email_text += "Joke of the Day provided by https://v2.jokeapi.dev/.\n"
     email_text += "Automated email service provided by https://www.pythonanywhere.com/."
 
-    # alternate text in case unusual characters produce an error
-    email_simple = "To: " + ", ".join(address) + "\n"
-    email_simple += f"Subject:Sunrise/Sunset Times for {email_list[i]['place']} (UTC-5)\n\n"
-    email_simple += f"{sun_times_list[i]}\n\n"
-    email_simple += f"{weather_list[i]}"
-    email_simple += divider
-    email_simple += joke_text
-    email_simple += space
-    email_simple += "This is an automated message from anb-daily.\n"
-    email_simple += "Astronomical data provided by https://sunrise-sunset.org (API).\n"
-    email_simple += "Weather forecast data provided by https://openweathermap.org (API).\n"
-    email_simple += "Joke of the Day provided by https://v2.jokeapi.dev/.\n"
-    email_simple += "Automated email service provided by https://www.pythonanywhere.com/."
-
     with smtplib.SMTP("smtp.gmail.com", port=587) as connection:
         connection.starttls()
         connection.login(my_email, my_password)

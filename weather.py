@@ -3,6 +3,7 @@
 from emails import email_list
 import requests
 import os
+import pytz
 from datetime import datetime
 
 weather_list = []
@@ -44,13 +45,15 @@ for num in range(len(email_list)):
 
     # next 12 hours:
     next_12_data = [hourly[i] for i in range(12)]
-    next_12_time_object = [datetime.fromtimestamp(i["dt"]) for i in next_12_data]
+    eastern_time = pytz.timezone("US/Eastern")
+    next_12_time_object = [datetime.utcfromtimestamp(i["dt"]).replace(tzinfo=pytz.utc).astimezone(eastern_time) for i in next_12_data]
     next_12_time_hour = [i.strftime("%H") for i in next_12_time_object]
     next_12_temp = []
     for i in range(12):
         next_12_temp_element = ""
-        next_12_temp_element += f"{next_12_time_hour[i]}:00 -- "
-        next_12_temp_element += f"{round(next_12_data[i].get('temp'))} F -- "
+        next_12_temp_element += f"{next_12_time_hour[i]}00 -- "
+        next_12_temp_element += f"{round(next_12_data[i].get('temp'))} F "
+        next_12_temp_element += f"(feels like {round(next_12_data[i].get('feels_like'))}) -- "
         next_12_temp_element += f"{next_12_data[i].get('weather')[0]['main'].capitalize()} "
         next_12_temp_element += f"({next_12_data[i].get('weather')[0]['description']}) -- "
         next_12_temp_element += f"{round(next_12_data[i].get('wind_speed'))} mph winds"

@@ -13,7 +13,7 @@ API's employed:
 Open Weather, https://openweathermap.org/api
 Open Trivia Database, https://opentdb.com/api_config.php
 Sunrise Sunset, https://sunrise-sunset.org/api
-JokeAPI, https://sv443.net/jokeapi/v2/
+icanhazdadjoke: https://icanhazdadjoke.com
 
 I am greatly appreciative to my subscribers and to the aforementioned services.
 Andrew

@@ -3,6 +3,7 @@
 
 import requests
 from emails import email_list
+from weather import utc_offset_list
 
 lat_lng = []
 
@@ -24,9 +25,11 @@ for j in range(len(lat_lng)):
     response1.raise_for_status()
     data1 = response1.json()
 
-    sunrise_hour = "0" + str(int(data1["results"]["sunrise"].split("T")[1][:2]) - 5)
+    utc_offset = utc_offset_list[j]
+
+    sunrise_hour = "0" + str(int(data1["results"]["sunrise"].split("T")[1][:2]) + utc_offset)
     sunrise_rest = data1["results"]["sunrise"][2:].split("T")[1][2:5]
-    sunset_hour = str(int(data1["results"]["sunset"].split("T")[1][:2]) - 5)
+    sunset_hour = str(int(data1["results"]["sunset"].split("T")[1][:2]) + utc_offset)
     sunset_rest = data1["results"]["sunset"][2:].split("T")[1][2:5]
     day_length_sec = data1["results"]["day_length"]
     day_length_hr = day_length_sec // 3600

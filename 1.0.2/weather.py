@@ -7,6 +7,7 @@ import pytz
 from datetime import datetime
 
 weather_list = []
+utc_offset_list = []
 
 for num in range(len(email_list)):
     place = email_list[num]["place"]
@@ -18,12 +19,15 @@ for num in range(len(email_list)):
         "lat": lat,
         "lon": lon,
         "appid": owm_acct,
-        "units": "imperial",
+        "units": "imperial"
         }
 
     response = requests.get("https://api.openweathermap.org/data/2.8/onecall", params=parameters)
     response.raise_for_status()
     data = response.json()
+
+    utc_offset = int(data["timezone_offset"] / 3600)
+    utc_offset_list.append(utc_offset)
 
     current = data["current"]
     current_temp = current["temp"]

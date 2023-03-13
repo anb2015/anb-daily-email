@@ -6,12 +6,12 @@ import os
 import smtplib
 from emails import email_list
 from sun_times import sun_times_list
-from weather import weather_list
+from weather import weather_list, utc_offset_list
 from trivia import trivia_questions, trivia_answers
 from words import described_staff
 from joke import today_joke
 
-my_email = "anb.daily@gmail.com"
+my_email = "*********@gmail.com"
 my_password = os.environ.get("GMAIL_PASSWORD")
 divider = "\n\n*      *      *      *      *      *      *      *      *      *      *      *      *\n\n"
 space = "\n\n\n\n\n\n"
@@ -21,7 +21,7 @@ for i in range(len(email_list)):
     address = email_list[i]["addresses"]
 
     email_text = "To: " + ", ".join(address) + "\n"
-    email_text += f"Subject:Sunrise/Sunset Times for {email_list[i]['place']} (UTC-5)\n\n"
+    email_text += f"Subject:Sunrise/Sunset Times for {email_list[i]['place']} (UTC{utc_offset_list[i]})\n\n"
     email_text += f"Greetings from the {described_staff}.\n\n"
     email_text += f"{sun_times_list[i]}\n\n"
     email_text += f"{weather_list[i]}"
